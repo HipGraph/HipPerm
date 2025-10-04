@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
         else
             A.ReadGeneralizedTuples(ifilename,  maximum<double>());
         
-        SpParHelper::Print("input matrix read\n");
+        SpParHelper::Print("input matrix read\n\n");
 
         if(transpose == 1)
         {
@@ -441,46 +441,46 @@ int main(int argc, char* argv[])
     
         if(myrank == 0)
         {
-            printf( "my permutation time is %f\n", tend - tstart );  
+            printf( "\nHipPerm permutation time is %f\n", tend - tstart );  
             fflush(stdout);
             double communication_time = comm_1_end - tstart + comm_2_end - comm_2_bgn + comm_3_end - comm_3_bgn + comm_4_end - comm_4_bgn + comm_5_end - comm_5_bgn;
             double total_time = tend - tstart;
-            printf( "my permutation communication time is %f\n", communication_time );  
+            printf( "HipPerm permutation communication time is %f\n", communication_time );  
             fflush(stdout);
             fflush(stdout);
             printf("local computation multi threaded : %f", comm_4_bgn-pvec_end+comp_2_end-comp_2_bgn);
             printf("First Part: p vector gathering : %f\n", pvec_end-tstart);
             printf("Second Part: local computation : %f\n", comm_5_bgn-pvec_end-(comm_4_end - comm_4_bgn));
             printf("Third part: exchange data %f\n", comm_5_end - comm_5_bgn );  
-            printf("Forth(Last) Part: build local matrix : %f\n", tend-comm_5_end);     
+            printf("Forth(Last) Part: build local matrix : %f\n\n", tend-comm_5_end);     
             fflush(stdout);
         }
         
         
         
-        double ttstart, ttend;
-        MPI_Barrier(World);
-        ttstart = MPI_Wtime();
-        A(pidx, pidx, true);
-        MPI_Barrier(World);
-        ttend = MPI_Wtime();
-        if (myrank == 0)
-            printf( "spref perm  time is %f\n", ttend - ttstart );  
-        fflush(stdout);
+        // double ttstart, ttend;
+        // MPI_Barrier(World);
+        // ttstart = MPI_Wtime();
+        // A(pidx, pidx, true);
+        // MPI_Barrier(World);
+        // ttend = MPI_Wtime();
+        // if (myrank == 0)
+        //     printf( "spref perm  time is %f\n", ttend - ttstart );  
+        // fflush(stdout);
 
-        float AloadImbalance = A.LoadImbalance();
-        if (myrank == 0) printf("------- A load imbalance after our permutation: %f\n", AloadImbalance);
+        // float AloadImbalance = A.LoadImbalance();
+        // if (myrank == 0) printf("------- A load imbalance after Spref permutation: %f\n", AloadImbalance);
         float VloadImbalance = V.LoadImbalance();
-        if (myrank == 0) printf("------- A load imbalance after spref permutation: %f\n", VloadImbalance);
+        if (myrank == 0) printf("------- A load imbalance after HipPerm permutation: %f\n", VloadImbalance);
 
         
-        A.PrintInfo();
+        // A.PrintInfo();
         V.PrintInfo();
-        if( V == A )
-            SpParHelper::Print("\n A==V \n");
-        else
-            SpParHelper::Print("\n permutation results isn't same\n");
-        fflush(stdout);
+        // if( V == A )
+        //     SpParHelper::Print("\n A==V \n");
+        // else
+        //     SpParHelper::Print("\n permutation results isn't same\n");
+        // fflush(stdout);
         
 	}
     
